@@ -2,7 +2,6 @@ package com.example.muscle_sns.controller;
 
 import com.example.muscle_sns.entity.User;
 import com.example.muscle_sns.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,8 +17,7 @@ public class UserController{
 
   private final UserRepository userRepository;
 
-  @Value("${file.upload-dir}")
-  private String uploadDir;
+  private final String uploadDir = "C:/Users/minor/OneDrive/デスクトップ/projects/muscle-sns/uploads/";
 
   public UserController(UserRepository userRepository) {
     this.userRepository = userRepository;
