@@ -1,5 +1,6 @@
 package com.example.muscle_sns.entity;
 
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -21,4 +22,7 @@ public class Post {
   private User user;
 
   private LocalDateTime createdAt = LocalDateTime.now();
+
+  @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<Like> likes;
 }

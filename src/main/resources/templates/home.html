@@ -51,6 +51,16 @@
               </form>
             </div>
           </div>
+
+          <div class="mt-2">
+            <form th:action="@{/likes/toggle}" method="post" class="d-inline">
+              <input type="hidden" name="postId" th:value="${post.id}" />
+              <button type="submit" class="btn btn-sm btn-outline-success">
+                <span th:text="${likeByUser[post.id]} ? 'いいね済み' : 'いいね'"></span>
+              </button>
+            </form>
+            <span class="ms-2" th:text="${likeCounts[post.id]} + ' likes'"></span>
+          </div>
         </div>
 
           <hr class="mt-3">
