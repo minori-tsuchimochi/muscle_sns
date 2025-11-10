@@ -50,18 +50,22 @@
                 <button type="submit" class="btn btn-sm btn-outline-danger">削除</button>
               </form>
             </div>
-          </div>
 
-          <div class="mt-2">
-            <form th:action="@{/likes/toggle}" method="post" class="d-inline">
-              <input type="hidden" name="postId" th:value="${post.id}" />
-              <button type="submit" class="btn btn-sm btn-outline-success">
-                <span th:text="${likeByUser[post.id]} ? 'いいね済み' : 'いいね'"></span>
-              </button>
-            </form>
-            <span class="ms-2" th:text="${likeCounts[post.id]} + ' likes'"></span>
+            <div class="mt-2" th:if="${post.user.username != username}">
+              <form th:action="@{/likes/toggle}" method="post" class="d-inline">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <button type="submit" class="btn btn-sm btn-outline-success">
+                  <span th:text="${likeByUser[post.id]} ? 'いいね済み' : 'いいね'"></span>
+                </button>
+              </form>
+              <span class="ms-2" th:text="${likeCounts[post.id]} + ' likes'"></span>
+            </div>
+            <div class="mt-2" th:if="${post.user.username == username}">
+              <span class="ms-2" th:text="${likeCounts[post.id]} + ' likes'"></span>
+            </div>
           </div>
         </div>
+        
 
         <div class="mt-2 ms-5">
           <div th:each="comment : ${post.comments}">
@@ -70,7 +74,7 @@
             <br>
           </div>
 
-          <form th:action="@{/comments/add}" method="post" class="mt-2">
+          <form th:action="@{/comments/add}" method="post" class="mt-2" th:if="${post.user.username != username}">
             <input type="hidden" name="postId" th:value="${post.id}" />
             <input type="text" name="content" placeholder="コメントを書く…" class="form-control d-inline-block w-75" required>
             <button type="submit" class="btn btn-sm btn-primary mt-1">送信</button>
