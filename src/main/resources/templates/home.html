@@ -71,6 +71,15 @@
           <div th:each="comment : ${post.comments}">
             <strong th:text="${comment.user.username}"></strong>:
             <span th:text="${comment.content}"></span>
+
+            <span th:if="${comment.user.username == username}">
+              <form th:action="@{/comments/delete}" method="post" class="d-inline">
+                <input type="hidden" name="commentId" th:value="${comment.id}" />
+                <button type="submit" class="btn btn-sm btn-outline-danger">削除</button>
+              </form>
+              <a th:href="@{'/comments/edit/' + ${comment.id}}" class="btn btn-sm btn-outline-primary">編集</a>
+            </span>
+
             <br>
           </div>
 

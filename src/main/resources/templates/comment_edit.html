@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>コメント編集</title>
+  </head>
+  <body>
+    <h1>コメント編集</h1>
+    <form th:action="@{/comments/edit}" method="post">
+      <input type="hidden" name="commentId" th:value="${comment.id}" />
+      <textarea name="content" required th:text="${comment.content}"></textarea>
+      <br>
+      <button type="submit">保存</button>
+      <a th:href="@{/home}">キャンセル</a>
+    </form>
+  </body>
+</html>
