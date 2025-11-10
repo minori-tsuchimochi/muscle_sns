@@ -9,12 +9,8 @@ import com.example.muscle_sns.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.ui.Model;
-
 @Controller
 public class CommentController {
 
@@ -57,15 +53,6 @@ public class CommentController {
     return "redirect:/home";
   }
 
-  @GetMapping("/comments/edit/{id}")
-  public String editCommentForm(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-    Comment comment = commentRepository.findById(id).orElse(null);
-    if(comment != null && comment.getUser().getUsername().equals(userDetails.getUsername())) {
-      model.addAttribute("comment", comment);
-      return "comment_edit";
-    }
-    return "redirect:/home";
-  }
 
   @PostMapping("/comments/edit")
   public String editComment(@RequestParam Long commentId, @RequestParam String content, @AuthenticationPrincipal UserDetails userDetails) {
