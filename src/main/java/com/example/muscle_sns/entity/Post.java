@@ -25,4 +25,7 @@ public class Post {
 
   @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<Like> likes;
+
+  @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<Comment> comments;
 }

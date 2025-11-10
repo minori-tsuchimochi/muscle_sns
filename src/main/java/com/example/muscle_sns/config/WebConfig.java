@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 外部フォルダを /uploads/ にマッピング
+        
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:C:/Users/minor/OneDrive/デスクトップ/projects/muscle-sns/uploads/");
     }
