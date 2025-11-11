@@ -28,14 +28,16 @@
 
       <div th:each="post : ${posts}" class="py-3">
         <div class="d-flex align-items-start">
-          <img th:if="${post.user.profileImage != null}"
-               th:src="@{'/uploads/' + ${post.user.profileImage}}"
-               class="rounded-circle me-3"
-               width="55" height="55">
-          <img th:if="${post.user.profileImage == null}"
-               th:src="@{/images/no_images.jpg}"
-               class="rounded-circle me-3"
-               width="55" height="55">
+          <a th:href="@{/mypage/{id}(id=${post.user.id})}">
+            <img th:if="${post.user.profileImage != null}"
+                th:src="@{'/uploads/' + ${post.user.profileImage}}"
+                class="rounded-circle me-3"
+                width="55" height="55">
+            <img th:if="${post.user.profileImage == null}"
+                th:src="@{/images/no_images.jpg}"
+                class="rounded-circle me-3"
+                width="55" height="55">
+          </a>
 
           <div>
             <strong class="fs-6" th:text="${post.user.username}"></strong><br>
