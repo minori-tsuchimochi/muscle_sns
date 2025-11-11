@@ -5,6 +5,7 @@ import com.example.muscle_sns.entity.User;
 import com.example.muscle_sns.repository.LikeRepository;
 import com.example.muscle_sns.repository.PostRepository;
 import com.example.muscle_sns.repository.UserRepository;
+import com.example.muscle_sns.repository.FollowerRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,13 @@ public class HomeController {
   private final PostRepository postRepository;
   private final UserRepository userRepository;
   private final LikeRepository likeRepository;
+  private final FollowerRepository followerRepository;
 
-  public HomeController(PostRepository postRepository, UserRepository userRepository, LikeRepository likeRepository) {
+  public HomeController(PostRepository postRepository, UserRepository userRepository, LikeRepository likeRepository, FollowerRepository followerRepository) {
     this.postRepository = postRepository;
     this.userRepository = userRepository;
     this.likeRepository = likeRepository;
+    this.followerRepository = followerRepository;
   }
 
   @GetMapping("/home")
@@ -39,16 +42,22 @@ public class HomeController {
 
     Map<Long, Integer> likeCounts = new HashMap<>();
     Map<Long, Boolean> likeByUser = new HashMap<>();
+    Map<Long, Boolean> isFollowingMap = new HashMap<>();
 
     for (Post post : posts) {
       likeCounts.put(post.getId(), likeRepository.countByPost(post));
       likeByUser.put(post.getId(), likeRepository.existsByUserAndPost(loginUser, post));
+
+      User postUser = post.getUser();
+      boolean isFollowing = followerRepository.existsByFollowerAndFollowing(loginUser, postUser);
+      isFollowingMap.put(postUser.getId(), isFollowing);
     }
 
 
     model.addAttribute("posts", posts);
     model.addAttribute("likeCounts", likeCounts);
     model.addAttribute("likeByUser", likeByUser);
+    model.addAttribute("isFollowingMap", isFollowingMap);
 
     return "home";
   }

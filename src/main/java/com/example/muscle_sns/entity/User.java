@@ -36,4 +36,10 @@ public class User {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<Comment> comments;
+
+  @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
+  private List<Follower> followingList;
+
+  @OneToMany(mappedBy = "following", cascade = CascadeType.REMOVE)
+  private List<Follower> followerList;
 }
