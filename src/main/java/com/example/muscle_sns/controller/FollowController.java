@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import jakarta.transaction.Transactional;
+import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("/follow")
@@ -45,5 +46,23 @@ public class FollowController {
     }
 
     return "redirect:/home";
+  }
+
+  @GetMapping("/followings/{id}")
+  public String followingList(@PathVariable Long id, Model model) {
+    User user = userRepository.findById(id).orElseThrow();
+    var followingUsers = user.getFollowingList().stream().map(Follower::getFollowing).toList();
+    model.addAttribute("users", followingUsers);
+    model.addAttribute("title", user.getUsername() + "さんのフォロー");
+    return "user_list";
+  }
+
+  @GetMapping("/followers/{id}")
+  public String followerList(@PathVariable Long id, Model model) {
+    User user = userRepository.findById(id).orElseThrow();
+    var followerUsers = user.getFollowerList().stream().map(Follower::getFollower).toList();
+    model.addAttribute("users", followerUsers);
+    model.addAttribute("title", user.getUsername() + "さんのフォロワー");
+    return "user_list";
   }
 }
