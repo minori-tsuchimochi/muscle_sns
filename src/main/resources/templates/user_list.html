@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>フォロー一覧</title>
+  </head>
+
+  <body>
+    <h2 th:text="${title}"></h2>
+
+    <div th:each="u : ${users}">
+      <p>
+        <a th:href="@{/mypage/{id}(id=${u.id})}" th:text="${u.username}"></a>
+      </p>
+    </div>
+
+    <a th:href="@{/mypage}">My Page</a>
+  </body>
+</html>

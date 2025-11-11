@@ -9,6 +9,12 @@
     <h1>My Page</h1>
     <p><strong th:text="${username}"></strong>さんの投稿一覧</p>
 
+    <p>
+      <a th:href="@{/follow/followings/{id}(id=${userId})}">フォロー<span th:text="${followingCount}">0</span>人</a>
+      <a th:href="@{/follow/followers/{id}(id=${userId})}">フォロワー<span th:text="${followerCount}">0</span>人</a>
+    </p>
+    
+
     <div>
       <img th:if="${profileImage != null}"
            th:src="@{'/uploads/' + ${profileImage}}"
@@ -47,13 +53,14 @@
       </p>
     </div>
 
-    <a th:href="@{/mypage/edit}">編集</a>
-
     <a th:href="@{/home}">HOME</a>
 
-    <form th:action="@{/mypage/delete}" method="post" onsubmit="return confirm('本当に退会しますか？');" class="d-inline">
-      <button type="submit" class="btn btn-danger">退会する</button>
-    </form>
+    <div th:if="${isOwnPage}">
+      <a th:href="@{/mypage/edit}">編集</a>
+        <form th:action="@{/mypage/delete}" method="post" onsubmit="return confirm('本当に退会しますか？');" class="d-inline">
+        <button type="submit" class="btn btn-danger">退会する</button>
+      </form>
+    </div>
     <hr>
 
     <div th:if="${#lists.isEmpty(posts)}">

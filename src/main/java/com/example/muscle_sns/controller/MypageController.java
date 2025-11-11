@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -23,10 +24,15 @@ public class MypageController {
     this.userRepository = userRepository;
   }
 
-  @GetMapping("/mypage")
-  public String mypage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-    if(userDetails != null) {
-      User user = userRepository.findByUsername(userDetails.getUsername());
+  @GetMapping({"/mypage", "/mypage/{id}"})
+  public String mypage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(required = false) Long id, Model model) {
+    User user;
+      if(id != null) {
+        user = userRepository.findById(id).orElseThrow();
+      } else {
+        user = userRepository.findByUsername(userDetails.getUsername());
+      }
+
       List<Post> userPosts = postRepository.findByUser(user);
 
       model.addAttribute("username", user.getUsername());
@@ -38,7 +44,12 @@ public class MypageController {
       model.addAttribute("bio", user.getBio());
       model.addAttribute("hobbies", user.getHobbies());
       model.addAttribute("posts", userPosts);
-    }
+      model.addAttribute("followingCount", user.getFollowingList().size());
+      model.addAttribute("followerCount", user.getFollowerList().size());
+      model.addAttribute("userId", user.getId());
+
+      boolean isOwnPage = id == null || user.getUsername().equals(userDetails.getUsername());
+      model.addAttribute("isOwnPage", isOwnPage);
 
     return "mypage";
   }
