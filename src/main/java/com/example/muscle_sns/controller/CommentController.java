@@ -8,10 +8,14 @@ import com.example.muscle_sns.repository.PostRepository;
 import com.example.muscle_sns.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-@Controller
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/comments")
 public class CommentController {
 
   private final CommentRepository commentRepository;
@@ -24,8 +28,8 @@ public class CommentController {
     this.postRepository = postRepository;
   }
 
-  @PostMapping("/comments/add")
-  public String addComment(
+  @PostMapping("/add")
+  public Map<String, Object> addCommentAjax(
     @RequestParam Long postId,
     @RequestParam String content,
     @AuthenticationPrincipal UserDetails userDetails
@@ -37,30 +41,45 @@ public class CommentController {
     comment.setUser(user);
     comment.setPost(post);
     comment.setContent(content);
-
     commentRepository.save(comment);
 
-    return "redirect:/home";
+    Map<String, Object> response = new HashMap<>();
+    response.put("id", comment.getId());
+    response.put("username", user.getUsername());
+    response.put("content", comment.getContent());
+
+    return response;
   }
   
-  @PostMapping("/comments/delete")
-  public String deleteComment(@RequestParam Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
+  @PostMapping("/delete")
+  public Map<String, Object>  deleteCommentAjax(@RequestParam Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
     Comment comment = commentRepository.findById(commentId).orElse(null);
+    boolean success = false;
     if (comment != null && comment.getUser().getUsername().equals(userDetails.getUsername())) {
       commentRepository.delete(comment);
+      success = true;
     }
 
-    return "redirect:/home";
+    Map<String, Object> response = new HashMap<>();
+    response.put("success", success);
+    response.put("commentId", commentId);
+    return response;
   }
 
 
-  @PostMapping("/comments/edit")
-  public String editComment(@RequestParam Long commentId, @RequestParam String content, @AuthenticationPrincipal UserDetails userDetails) {
+  @PostMapping("/edit")
+  public Map<String, Object> editCommentAjax(@RequestParam Long commentId, @RequestParam String content, @AuthenticationPrincipal UserDetails userDetails) {
     Comment comment = commentRepository.findById(commentId).orElse(null);
+    boolean success = false;
     if(comment != null && comment.getUser().getUsername().equals(userDetails.getUsername())) {
       comment.setContent(content);
       commentRepository.save(comment);
+      success = true;
     }
-    return "redirect:/home";
+    Map<String, Object> response = new HashMap<>();
+    response.put("success", success);
+    response.put("commentId", commentId);
+    response.put("content", comment != null ? comment.getContent() : "");
+    return response;
   }
 }
