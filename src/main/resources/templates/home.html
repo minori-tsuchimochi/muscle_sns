@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>Home</title>
   </head>
 
@@ -57,6 +58,7 @@
               <form th:action="@{/likes/toggle}" method="post" class="d-inline">
                 <input type="hidden" name="postId" th:value="${post.id}" />
                 <button type="submit" class="btn btn-sm btn-outline-success">
+                  <i th:class="${likeByUser[post.id]} ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                   <span th:text="${likeByUser[post.id]} ? 'いいね済み' : 'いいね'"></span>
                 </button>
               </form>

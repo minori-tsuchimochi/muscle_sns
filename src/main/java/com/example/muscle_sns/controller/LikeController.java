@@ -33,7 +33,11 @@ public class LikeController {
     User user = userRepository.findByUsername(userDetails.getUsername());
     Post post = postRepository.findById(postId).orElseThrow();
 
-    if(!likeRepository.existsByUserAndPost(user, post)) {
+    Like existingLike = likeRepository.findByUserAndPost(user, post);
+
+    if(existingLike != null) {
+      likeRepository.delete(existingLike);
+    } else {
       Like like = new Like();
       like.setUser(user);
       like.setPost(post);
