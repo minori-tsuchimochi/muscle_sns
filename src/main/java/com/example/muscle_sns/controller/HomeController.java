@@ -38,7 +38,7 @@ public class HomeController {
     }
 
     User loginUser = userRepository.findByUsername(userDetails.getUsername());
-    List<Post> posts = postRepository.findAll();
+    List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
 
     Map<Long, Integer> likeCounts = new HashMap<>();
     Map<Long, Boolean> likeByUser = new HashMap<>();

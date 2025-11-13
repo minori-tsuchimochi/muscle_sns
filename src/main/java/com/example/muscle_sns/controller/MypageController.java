@@ -37,7 +37,7 @@ public class MypageController {
         user = userRepository.findByUsername(userDetails.getUsername());
       }
 
-      List<Post> userPosts = postRepository.findByUser(user);
+      List<Post> userPosts = postRepository.findByUserOrderByCreatedAtDesc(user);
 
       model.addAttribute("username", user.getUsername());
       model.addAttribute("profileImage", user.getProfileImage());
